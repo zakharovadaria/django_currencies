@@ -1,17 +1,15 @@
-from django.http import JsonResponse
+from rest_framework import generics
 
 from currencies.models import Currency
+from currencies.serializers import CurrencySerializer
 
 
-def currencies_list(request):
-    currencies = Currency.objects.all()
-    return JsonResponse({"result": list(currencies.values())})
+class CurrenciesListView(generics.ListAPIView):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
 
 
-def currencies_detail(request, pk):
-    currency = Currency.objects.get(id=pk)
-    return JsonResponse({"result": {
-        "id": currency.id,
-        "name": currency.name,
-        "rate": currency.rate,
-    }})
+class CurrenciesDetailView(generics.RetrieveAPIView):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
+
