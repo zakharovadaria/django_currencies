@@ -4,12 +4,14 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from currencies.models import Currency
+from currencies.pagination import CustomPagination
 from currencies.serializers import CurrencySerializer
 
 
 class CurrenciesListView(generics.ListAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
+    pagination_class = CustomPagination
 
 
 class CurrenciesDetailView(generics.RetrieveAPIView):
