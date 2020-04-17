@@ -7,3 +7,6 @@ class Currency(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.rate}"
+
+    class Meta:
+        ordering = ['-id']
