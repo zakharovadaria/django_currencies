@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -125,3 +127,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 APPEND_SLASH = True
+
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BEAT_SCHEDULE = {
+    'import_currencies_task': {
+        'task': 'currencies.tasks.import_currencies_task',
+        'schedule': crontab(hour=0, minute=0),
+        'args': (),
+    },
+}
