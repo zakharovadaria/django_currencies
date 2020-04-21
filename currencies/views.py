@@ -30,7 +30,7 @@ class CurrenciesImportView(generics.GenericAPIView):
 
     def get(self, request):
         import_currencies_task.delay()
-        return Response({"result": "true"})
+        return Response(status=status.HTTP_200_OK)
 
 
 class Logout(generics.GenericAPIView):
