@@ -6,21 +6,30 @@ import requests
 from currencies.models import Currency
 
 
-def import_currencies():
+def get_currencies_from_xml():
     r = requests.get(os.environ.get("IMPORT_URL"))
     root = ElementTree.fromstring(r.text)
+    currencies = dict()
     for child in root:
-        name = None
-        value = None
+        currencies[child.find("Name").text] = float(child.find("Value").text.replace(",", "."))
 
-        for ch in child:
-            if ch.tag.lower() == "name":
-                name = ch.text
-            if ch.tag.lower() == "value":
-                value = ch.text.replace(",", ".")
-                value = float(value)
+    return currencies
 
-        if name and value:
-            if not Currency.objects.filter(name=name):
-                currency = Currency(name=name, rate=value)
-                currency.save()
+
+def import_currencies():
+    currencies = get_currencies_from_xml()
+    db_currencies = Currency.objects.all()
+
+    for db_currency in db_currencies:
+        if db_currency.name not in currencies:
+            db_currency.delete()
+
+    for name, rate in currencies.items():
+        try:
+            db_currency = Currency.objects.get(name=name)
+            db_currency.name = name
+            db_currency.rate = rate
+        except Currency.DoesNotExist:
+            db_currency = Currency(name=name, rate=rate)
+
+        db_currency.save()
