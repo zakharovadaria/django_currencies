@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import dj_database_url
 
-from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -127,15 +126,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 APPEND_SLASH = True
-
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
-CELERY_BEAT_SCHEDULE = {
-    'import_currencies_task': {
-        'task': 'currencies.tasks.import_currencies_task',
-        'schedule': crontab(hour=0, minute=0),
-        'args': (),
-    },
-}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

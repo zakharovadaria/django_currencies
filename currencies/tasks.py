@@ -1,8 +1,7 @@
-from celery import shared_task
-
+from currencies.celery import celery_app
 from currencies.import_service import import_currencies
 
 
-@shared_task
+@celery_app.task
 def import_currencies_task(*args, **kwargs):
     import_currencies()
