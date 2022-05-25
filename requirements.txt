@@ -16,7 +16,7 @@ humanize==0.5.1
 idna==2.9
 kombu==4.6.8
 psycopg2-binary==2.8.5
-PyJWT==1.7.1
+PyJWT==2.4.0
 python-dotenv==0.13.0
 pytz==2019.3
 requests==2.23.0
